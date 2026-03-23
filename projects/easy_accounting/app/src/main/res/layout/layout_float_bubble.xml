@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_float_bubble"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:elevation="8dp">
+
+    <!-- 金额和来源 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_bubble_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¥0.00"
+            android:textColor="#FF5722"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_source_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="6dp"
+            android:src="@drawable/ic_alipay"
+            android:contentDescription="来源" />
+    </LinearLayout>
+
+    <!-- 来源和时间 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/ic_alipay"
+            android:visibility="gone"
+            android:contentDescription="" />
+
+        <TextView
+            android:id="@+id/tv_bubble_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="4dp"
+            android:text="支付宝"
+            android:textColor="#757575"
+            android:textSize="11sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:text="·"
+            android:textColor="#757575"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/tv_bubble_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="#757575"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- 分类快捷按钮 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_category_food"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="餐饮"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_food"
+            app:tint="#FF9800" />
+
+        <ImageButton
+            android:id="@+id/btn_category_transport"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="交通"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_transport"
+            app:tint="#2196F3" />
+
+        <ImageButton
+            android:id="@+id/btn_category_shopping"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="购物"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_shopping"
+            app:tint="#E91E63" />
+
+        <ImageButton
+            android:id="@+id/btn_category_other"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="其他"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_other"
+            app:tint="#9E9E9E" />
+    </LinearLayout>
+
+    <!-- 确认/忽略按钮 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_ignore"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="忽略"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_close"
+            app:tint="#9E9E9E" />
+
+        <ImageButton
+            android:id="@+id/btn_confirm"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_confirm_button"
+            android:contentDescription="确认"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_check"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

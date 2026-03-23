@@ -31,6 +31,9 @@ interface CategoryDao {
     @Query("SELECT * FROM categories WHERE id = :id")
     suspend fun getCategoryById(id: Long): Category?
 
+    @Query("SELECT * FROM categories WHERE name = :name AND type = :type LIMIT 1")
+    suspend fun getCategoryByNameAndType(name: String, type: CategoryType): Category?
+
     @Query("SELECT * FROM categories WHERE isCustom = 1 ORDER BY name")
     fun getCustomCategories(): Flow<List<Category>>
 

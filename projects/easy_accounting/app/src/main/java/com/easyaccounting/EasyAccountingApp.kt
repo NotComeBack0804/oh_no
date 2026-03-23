@@ -6,6 +6,7 @@ import com.easyaccounting.data.repository.AccountRepository
 import com.easyaccounting.data.repository.BillRepository
 import com.easyaccounting.data.repository.CategoryRepository
 import com.easyaccounting.data.repository.IncomeRepository
+import com.easyaccounting.data.repository.PendingRecordRepository
 
 class EasyAccountingApp : Application() {
 
@@ -25,6 +26,10 @@ class EasyAccountingApp : Application() {
 
     val accountRepository: AccountRepository by lazy {
         AccountRepository(database.accountDao())
+    }
+
+    val pendingRecordRepository: PendingRecordRepository by lazy {
+        PendingRecordRepository(database.pendingRecordDao())
     }
 
     override fun onCreate() {

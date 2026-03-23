@@ -2,6 +2,8 @@ package com.easyaccounting.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -18,6 +20,7 @@ import com.easyaccounting.ui.main.BillAdapter
 import com.easyaccounting.ui.main.IncomeAdapter
 import com.easyaccounting.ui.main.MainViewModel
 import com.easyaccounting.ui.main.MainViewModelFactory
+import com.easyaccounting.ui.setting.AccessibilitySettingActivity
 import com.easyaccounting.util.DateUtils
 import com.easyaccounting.util.FormatUtils
 import com.github.mikephil.charting.components.XAxis
@@ -159,6 +162,22 @@ class MainActivity : AppCompatActivity() {
             val keyword = binding.etSearch.text.toString()
             viewModel.setSearchKeyword(keyword)
             true
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_auto_accounting -> {
+                val intent = Intent(this, AccessibilitySettingActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

@@ -6,7 +6,7 @@
 
 - **数据库名称**: `easy_accounting.db`
 - **加密**: SQLCipher 加密存储
-- **版本**: 1
+- **版本**: 2
 
 ---
 
@@ -54,6 +54,17 @@
 | name | String | 账户名称 |
 | type | AccountType | 账户类型 |
 | balance | Double | 余额 |
+
+### PendingRecord (待确认账单表)
+
+| 字段 | 类型 | 描述 |
+|------|------|------|
+| id | Long (PK, auto) | 主键 |
+| amount | Double | 金额 |
+| source | PaySource | 来源 (ALIPAY/WECHAT) |
+| date | Long | 支付时间戳 |
+| createdAt | Long | 创建时间戳 |
+| status | PendingStatus | 状态 (PENDING/CONFIRMED/IGNORED) |
 
 ---
 
@@ -177,6 +188,43 @@ suspend fun getAccountById(id: Long): Account?
 suspend fun updateBalance(accountId: Long, amount: Double)
 ```
 
+### PendingRecordDao
+
+```kotlin
+// 插入待确认账单
+suspend fun insert(pendingRecord: PendingRecord): Long
+
+// 更新待确认账单
+suspend fun update(pendingRecord: PendingRecord)
+
+// 删除待确认账单
+suspend fun delete(pendingRecord: PendingRecord)
+
+// 按状态获取待确认账单列表
+fun getPendingRecordsByStatus(status: PendingStatus): Flow<List<PendingRecord>>
+
+// 获取所有待确认账单
+fun getAllPendingRecords(): Flow<List<PendingRecord>>
+
+// 按ID获取
+suspend fun getPendingRecordById(id: Long): PendingRecord?
+
+// 获取最新待确认账单
+suspend fun getLatestPendingRecord(): PendingRecord?
+
+// 更新状态
+suspend fun updateStatus(id: Long, status: PendingStatus)
+
+// 按ID删除
+suspend fun deleteById(id: Long)
+
+// 按状态删除
+suspend fun deleteByStatus(status: PendingStatus)
+
+// 获取待确认数量
+fun getPendingCount(status: PendingStatus): Flow<Int>
+```
+
 ---
 
 ## 枚举类型
@@ -198,6 +246,25 @@ enum class AccountType {
     WECHAT,    // 微信
     BANK_CARD, // 银行卡
     CASH       // 现金
+}
+```
+
+### PaySource
+
+```kotlin
+enum class PaySource {
+    ALIPAY,   // 支付宝
+    WECHAT    // 微信
+}
+```
+
+### PendingStatus
+
+```kotlin
+enum class PendingStatus {
+    PENDING,   // 待确认
+    CONFIRMED, // 已确认（已转为正式账单）
+    IGNORED    // 已忽略
 }
 ```
 
@@ -253,6 +320,50 @@ const val EXTRA_BILL_ID = "extra_bill_id"
 
 // 收入详情
 const val EXTRA_INCOME_ID = "extra_income_id"
+```
+
+### AccessibilitySettingActivity
+
+无特殊 Intent Extra，从 MainActivity 工具栏菜单启动。
+
+---
+
+## 服务类
+
+### PayAccessibilityService (无障碍服务)
+
+```kotlin
+// 支付来源包名
+const val PACKAGE_ALIPAY = "com.eg.android.AlipayGPhone"
+const val PACKAGE_WECHAT = "com.tencent.mm"
+
+// Intent Action：启用自动记账
+const val ACTION_ENABLE_AUTO_ACCOUNTING = "com.easyaccounting.ENABLE_AUTO_ACCOUNTING"
+
+// Intent Action：禁用自动记账
+const val ACTION_DISABLE_AUTO_ACCOUNTING = "com.easyaccounting.DISABLE_AUTO_ACCOUNTING"
+
+// 服务运行状态
+var isServiceRunning: Boolean
+
+// 自动记账开关
+var autoAccountingEnabled: Boolean
+```
+
+### FloatBubbleService (悬浮窗服务)
+
+```kotlin
+// Intent Action：显示气泡
+const val ACTION_SHOW_BUBBLE = "com.easyaccounting.SHOW_BUBBLE"
+
+// Intent Action：关闭气泡
+const val ACTION_DISMISS_BUBBLE = "com.easyaccounting.DISMISS_BUBBLE"
+
+// Intent Action：确认账单（需附帶 record_id 和 category_id）
+const val ACTION_CONFIRM_BILL = "com.easyaccounting.CONFIRM_BILL"
+
+// Intent Action：忽略账单（需附帶 record_id）
+const val ACTION_IGNORE_BILL = "com.easyaccounting.IGNORE_BILL"
 ```
 
 ---

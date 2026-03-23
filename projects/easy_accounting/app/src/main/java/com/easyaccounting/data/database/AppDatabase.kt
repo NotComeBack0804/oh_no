@@ -9,12 +9,14 @@ import com.easyaccounting.data.dao.AccountDao
 import com.easyaccounting.data.dao.BillDao
 import com.easyaccounting.data.dao.CategoryDao
 import com.easyaccounting.data.dao.IncomeDao
+import com.easyaccounting.data.dao.PendingRecordDao
 import com.easyaccounting.data.entity.Account
 import com.easyaccounting.data.entity.AccountType
 import com.easyaccounting.data.entity.Bill
 import com.easyaccounting.data.entity.Category
 import com.easyaccounting.data.entity.CategoryType
 import com.easyaccounting.data.entity.Income
+import com.easyaccounting.data.entity.PendingRecord
 import com.easyaccounting.util.SecurityUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +25,8 @@ import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 
 @Database(
-    entities = [Bill::class, Income::class, Category::class, Account::class],
-    version = 1,
+    entities = [Bill::class, Income::class, Category::class, Account::class, PendingRecord::class],
+    version = 2,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -32,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun incomeDao(): IncomeDao
     abstract fun categoryDao(): CategoryDao
     abstract fun accountDao(): AccountDao
+    abstract fun pendingRecordDao(): PendingRecordDao
 
     companion object {
         private const val DATABASE_NAME = "easy_accounting.db"
