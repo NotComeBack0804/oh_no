@@ -1,0 +1,154 @@
+[
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_education.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_education.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_layout_float_bubble.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/layout_float_bubble.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_other.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_other.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_activity_add_record.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_add_record.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_item_bill.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/item_bill.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_chevron_right.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_chevron_right.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_calendar.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_calendar.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_salary.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_salary.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_medical.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_medical.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_food.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_food.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_chevron_left.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_chevron_left.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/menu_menu_main.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/menu/menu_main.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_bank.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_bank.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_alipay.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_alipay.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_shopping.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_shopping.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_bg_float_bubble.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/bg_float_bubble.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_activity_main.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_item_category.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/item_category.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_entertainment.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_entertainment.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_transport.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_transport.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_check.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_check.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_arrow_back.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_arrow_back.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_bonus.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_bonus.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_close.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_close.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_add.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_add.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_activity_record_detail.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_record_detail.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_auto_accounting.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_auto_accounting.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_activity_accessibility_setting.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_accessibility_setting.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_cash.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_cash.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_wechat.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_wechat.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_ic_investment.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/ic_investment.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/drawable_bg_confirm_button.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/drawable/bg_confirm_button.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_item_account.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/item_account.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/layout_item_income.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/layout/item_income.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-debug-46:/xml_pay_accessibility_service.xml.flat",
+        "source": "com.easyaccounting.app-main-48:/xml/pay_accessibility_service.xml"
+    }
+]

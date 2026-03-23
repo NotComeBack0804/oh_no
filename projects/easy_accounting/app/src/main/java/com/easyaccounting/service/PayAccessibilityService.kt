@@ -263,7 +263,7 @@ class PayAccessibilityService : AccessibilityService() {
             notificationTimeout = 100
             packageNames = arrayOf(PACKAGE_ALIPAY, PACKAGE_WECHAT)
         }
-        serviceAccessibilityInfo = info
+        serviceInfo = info
     }
 
     override fun onDestroy() {

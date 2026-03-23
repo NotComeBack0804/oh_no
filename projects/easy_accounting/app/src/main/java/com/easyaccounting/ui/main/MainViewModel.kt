@@ -104,22 +104,27 @@ class MainViewModel(
     // 近6个月的趋势数据
     val trendData: Flow<List<MonthlyTrend>> = flow {
         val trends = mutableListOf<MonthlyTrend>()
-        for (i in 5 downTo 0) {
-            val timeMillis = DateUtils.getMonthsAgo(i)
-            val start = DateUtils.getStartOfMonth(timeMillis)
-            val end = DateUtils.getEndOfMonth(timeMillis)
+        val calendar = java.util.Calendar.getInstance()
+        for (monthOffset in listOf(5, 4, 3, 2, 1, 0)) {
+            calendar.timeInMillis = System.currentTimeMillis()
+            calendar.add(java.util.Calendar.MONTH, -monthOffset)
+            calendar.set(java.util.Calendar.DAY_OF_MONTH, 1)
+            calendar.set(java.util.Calendar.HOUR_OF_DAY, 0)
+            calendar.set(java.util.Calendar.MINUTE, 0)
+            calendar.set(java.util.Calendar.SECOND, 0)
+            calendar.set(java.util.Calendar.MILLISECOND, 0)
+            val start = calendar.timeInMillis
+            calendar.set(java.util.Calendar.DAY_OF_MONTH, calendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH))
+            calendar.set(java.util.Calendar.HOUR_OF_DAY, 23)
+            calendar.set(java.util.Calendar.MINUTE, 59)
+            calendar.set(java.util.Calendar.SECOND, 59)
+            calendar.set(java.util.Calendar.MILLISECOND, 999)
+            val end = calendar.timeInMillis
             val expense = billRepository.getBillsByDateRangeSync(start, end).sumOf { it.amount }
             val income = incomeRepository.getIncomesByDateRangeSync(start, end).sumOf { it.amount }
-            val calendar = java.util.Calendar.getInstance()
-            calendar.timeInMillis = start
-            trends.add(
-                MonthlyTrend(
-                    year = calendar.get(java.util.Calendar.YEAR),
-                    month = calendar.get(java.util.Calendar.MONTH) + 1,
-                    expense = expense,
-                    income = income
-                )
-            )
+            val year = calendar.get(java.util.Calendar.YEAR)
+            val month = calendar.get(java.util.Calendar.MONTH) + 1
+            trends.add(MonthlyTrend(year = year, month = month, expense = expense, income = income))
         }
         emit(trends)
     }

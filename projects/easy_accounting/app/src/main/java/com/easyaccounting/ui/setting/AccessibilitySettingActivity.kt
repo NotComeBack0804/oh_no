@@ -112,8 +112,13 @@ class AccessibilitySettingActivity : AppCompatActivity() {
             AccessibilityServiceInfo.FEEDBACK_GENERIC
         )
 
-        val componentName = ComponentName(this, PayAccessibilityService::class.java)
-        return enabledServices.any { it.resolveInfo.serviceInfo.componentName == componentName }
+        val targetPackage = packageName
+        val targetClass = PayAccessibilityService::class.java.name
+        return enabledServices.any { service ->
+            service.resolveInfo?.serviceInfo?.let { serviceInfo ->
+                serviceInfo.packageName == targetPackage && serviceInfo.name == targetClass
+            } ?: false
+        }
     }
 
     /**

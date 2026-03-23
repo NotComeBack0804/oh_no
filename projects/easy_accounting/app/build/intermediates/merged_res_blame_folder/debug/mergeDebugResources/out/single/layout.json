@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/item_category.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/item_category.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/activity_record_detail.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_record_detail.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/item_account.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/item_account.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/activity_add_record.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_add_record.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/item_income.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/item_income.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/layout_float_bubble.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/layout_float_bubble.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/item_bill.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/item_bill.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/activity_accessibility_setting.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_accessibility_setting.xml"
+    },
+    {
+        "merged": "com.easyaccounting.app-mergeDebugResources-45:/layout/activity_main.xml",
+        "source": "com.easyaccounting.app-main-48:/layout/activity_main.xml"
+    }
+]
