@@ -1,5 +1,6 @@
 package com.easyaccounting.ui.main
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.easyaccounting.data.entity.Category
 import com.easyaccounting.databinding.ItemCategoryBinding
 import com.easyaccounting.util.IconUtils
+import com.google.android.material.R as MaterialAttr
+import com.google.android.material.color.MaterialColors
 
 class CategoryAdapter(
     private val onItemClick: (Category) -> Unit
@@ -18,7 +21,6 @@ class CategoryAdapter(
     fun setSelectedCategory(categoryId: Long?) {
         val oldSelected = selectedCategoryId
         selectedCategoryId = categoryId
-        // 刷新旧的选中项和新的选中项
         currentList.forEachIndexed { index, category ->
             if (category.id == oldSelected || category.id == categoryId) {
                 notifyItemChanged(index)
@@ -55,7 +57,26 @@ class CategoryAdapter(
         fun bind(category: Category) {
             binding.tvCategoryName.text = category.name
             binding.ivCategoryIcon.setImageResource(IconUtils.getIconResourceId(category.icon))
-            binding.root.isSelected = category.id == selectedCategoryId
+
+            val selected = category.id == selectedCategoryId
+            val density = binding.root.resources.displayMetrics.density
+            val strokeColor = if (selected) {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorPrimary)
+            } else {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorOutlineVariant)
+            }
+            val backgroundColor = if (selected) {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorPrimaryContainer)
+            } else {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorSurface)
+            }
+
+            binding.root.isSelected = selected
+            binding.root.strokeColor = strokeColor
+            binding.root.strokeWidth = if (selected) (2 * density).toInt() else 1
+            binding.root.setCardBackgroundColor(backgroundColor)
+            binding.root.cardElevation = if (selected) 6f * density else 0f
+            binding.tvCategoryName.setTypeface(null, if (selected) Typeface.BOLD else Typeface.NORMAL)
         }
     }
 

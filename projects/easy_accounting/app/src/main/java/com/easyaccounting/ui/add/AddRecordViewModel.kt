@@ -11,10 +11,12 @@ import com.easyaccounting.data.repository.BillRepository
 import com.easyaccounting.data.repository.CategoryRepository
 import com.easyaccounting.data.repository.IncomeRepository
 import com.easyaccounting.util.DateUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddRecordViewModel(
     private val billRepository: BillRepository,
@@ -64,12 +66,16 @@ class AddRecordViewModel(
     val accounts: StateFlow<List<Account>> = _accounts.asStateFlow()
 
     // 保存结果
-    private val _saveResult = MutableLiveData<SaveResult>()
-    val saveResult: LiveData<SaveResult> = _saveResult
+    private val _saveResult = MutableLiveData<SaveResult?>()
+    val saveResult: LiveData<SaveResult?> = _saveResult
 
     // 加载状态
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    // 数据是否已加载完成
+    private val _isDataLoaded = MutableStateFlow(false)
+    val isDataLoaded: StateFlow<Boolean> = _isDataLoaded.asStateFlow()
 
     init {
         loadData()
@@ -77,12 +83,16 @@ class AddRecordViewModel(
 
     private fun loadData() {
         viewModelScope.launch {
-            // 加载支出分类
-            _expenseCategories.value = categoryRepository.getCategoriesByTypeSync(CategoryType.EXPENSE)
-            // 加载收入分类
-            _incomeCategories.value = categoryRepository.getCategoriesByTypeSync(CategoryType.INCOME)
-            // 加载账户
-            _accounts.value = accountRepository.getAllAccountsSync()
+            try {
+                // 加载支出分类
+                _expenseCategories.value = categoryRepository.getCategoriesByTypeSync(CategoryType.EXPENSE)
+                // 加载收入分类
+                _incomeCategories.value = categoryRepository.getCategoriesByTypeSync(CategoryType.INCOME)
+                // 加载账户
+                _accounts.value = accountRepository.getAllAccountsSync()
+            } finally {
+                _isDataLoaded.value = true
+            }
         }
     }
 
@@ -116,19 +126,33 @@ class AddRecordViewModel(
     }
 
     fun save() {
+        // 先在主线程做快速验证
+        val amountStr = _amount.value
+        if (amountStr.isNullOrBlank()) {
+            _saveResult.value = SaveResult.Error("请输入金额")
+            return
+        }
+        val amountValue = amountStr.toDoubleOrNull()
+        if (amountValue == null || amountValue <= 0) {
+            _saveResult.value = SaveResult.Error("请输入有效金额")
+            return
+        }
+        if (_selectedCategory.value == null) {
+            _saveResult.value = SaveResult.Error("请选择分类")
+            return
+        }
+
+        // 启动后台任务进行保存
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val amountValue = _amount.value.toDoubleOrNull()
-                if (amountValue == null || amountValue <= 0) {
-                    _saveResult.value = SaveResult.Error("请输入有效金额")
-                    return@launch
+                val result = withContext(Dispatchers.IO) {
+                    when (_recordType.value) {
+                        RecordType.EXPENSE -> saveExpenseToDb(amountValue)
+                        RecordType.INCOME -> saveIncomeToDb(amountValue)
+                    }
                 }
-
-                when (_recordType.value) {
-                    RecordType.EXPENSE -> saveExpense(amountValue)
-                    RecordType.INCOME -> saveIncome(amountValue)
-                }
+                _saveResult.value = result
             } catch (e: Exception) {
                 _saveResult.value = SaveResult.Error(e.message ?: "保存失败")
             } finally {
@@ -137,7 +161,7 @@ class AddRecordViewModel(
         }
     }
 
-    private suspend fun saveExpense(amount: Double) {
+    private suspend fun saveExpenseToDb(amount: Double): SaveResult {
         val categoryId = _selectedCategory.value?.id
         val accountId = _selectedAccount.value?.id
         val remark = _remark.value.takeIf { it.isNotBlank() }
@@ -150,14 +174,13 @@ class AddRecordViewModel(
             accountId = accountId
         )
         billRepository.insertBill(bill)
-        _saveResult.value = SaveResult.Success
+        return SaveResult.Success
     }
 
-    private suspend fun saveIncome(amount: Double) {
+    private suspend fun saveIncomeToDb(amount: Double): SaveResult {
         val source = _selectedCategory.value?.name ?: _incomeSource.value
         if (source.isBlank()) {
-            _saveResult.value = SaveResult.Error("请选择或输入收入来源")
-            return
+            return SaveResult.Error("请选择或输入收入来源")
         }
         val accountId = _selectedAccount.value?.id
         val remark = _remark.value.takeIf { it.isNotBlank() }
@@ -170,7 +193,7 @@ class AddRecordViewModel(
             accountId = accountId
         )
         incomeRepository.insertIncome(income)
-        _saveResult.value = SaveResult.Success
+        return SaveResult.Success
     }
 
     fun clearSaveResult() {

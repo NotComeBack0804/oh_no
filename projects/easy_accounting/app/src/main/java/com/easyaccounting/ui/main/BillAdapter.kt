@@ -9,6 +9,7 @@ import com.easyaccounting.data.entity.BillWithCategory
 import com.easyaccounting.databinding.ItemBillBinding
 import com.easyaccounting.util.DateUtils
 import com.easyaccounting.util.FormatUtils
+import com.easyaccounting.util.IconUtils
 
 class BillAdapter(
     private val onItemClick: (BillWithCategory) -> Unit,
@@ -51,8 +52,11 @@ class BillAdapter(
         fun bind(billWithCategory: BillWithCategory) {
             binding.tvAmount.text = "- ${FormatUtils.formatAmount(billWithCategory.amount)}"
             binding.tvDate.text = DateUtils.formatDay(billWithCategory.date)
-            binding.tvRemark.text = billWithCategory.remark ?: ""
-            binding.tvCategory.text = billWithCategory.categoryName ?: "未分类"
+            binding.tvRemark.text = billWithCategory.remark?.takeIf { it.isNotBlank() } ?: "未填写备注"
+            binding.tvCategory.text = billWithCategory.categoryName?.takeIf { it.isNotBlank() } ?: "未分类"
+            binding.ivCategoryIcon.setImageResource(
+                IconUtils.getCategoryIconByName(billWithCategory.categoryName)
+            )
         }
     }
 

@@ -3,6 +3,7 @@ package com.easyaccounting
 import android.app.Application
 import com.easyaccounting.data.database.AppDatabase
 import com.easyaccounting.data.repository.AccountRepository
+import com.easyaccounting.data.repository.AiChatRepository
 import com.easyaccounting.data.repository.BillRepository
 import com.easyaccounting.data.repository.CategoryRepository
 import com.easyaccounting.data.repository.IncomeRepository
@@ -30,6 +31,10 @@ class EasyAccountingApp : Application() {
 
     val pendingRecordRepository: PendingRecordRepository by lazy {
         PendingRecordRepository(database.pendingRecordDao())
+    }
+
+    val aiChatRepository: AiChatRepository by lazy {
+        AiChatRepository(database.aiChatMessageDao())
     }
 
     override fun onCreate() {

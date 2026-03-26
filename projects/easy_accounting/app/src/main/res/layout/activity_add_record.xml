@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addRecordRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -10,6 +11,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -23,298 +25,334 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="28dp">
 
-            <!-- 金额显示 -->
-            <TextView
-                android:id="@+id/tvAmount"
+            <LinearLayout
+                android:id="@+id/amountPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="0.00"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="48sp"
-                android:textStyle="bold" />
+                android:background="@drawable/bg_amount_expense"
+                android:orientation="vertical"
+                android:padding="22dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="元"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
-                android:textColor="?attr/colorOnSurfaceVariant" />
-
-            <!-- 类型切换 -->
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/toggleGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                app:checkedButton="@id/btn_expense"
-                app:singleSelection="true">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_expense"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tvAmountHint"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="支出" />
+                    android:text="支出金额"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_income"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="收入" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <!-- 分类选择 -->
-            <TextView
-                android:id="@+id/tvCategoryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="选择分类"
-                android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCategories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:overScrollMode="never"
-                tools:itemCount="7"
-                tools:listitem="@layout/item_category" />
-
-            <!-- 日期选择 -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnDate"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:icon="@drawable/ic_calendar"
-                tools:text="2024-01-15" />
-
-            <!-- 账户选择 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="选择账户"
-                android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAccounts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:overScrollMode="never"
-                tools:itemCount="4"
-                tools:listitem="@layout/item_account" />
-
-            <!-- 备注输入 -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etRemark"
+                <TextView
+                    android:id="@+id/tvAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="添加备注（选填）"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="10dp"
+                    android:text="0.00"
+                    android:textAppearance="?attr/textAppearanceDisplaySmall"
+                    android:textStyle="bold"
+                    tools:text="128.80" />
 
-            <!-- 数字键盘 -->
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:columnCount="3"
-                android:rowCount="4">
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    app:checkedButton="@id/btn_expense"
+                    app:singleSelection="true">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn1"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="1"
-                    android:textSize="24sp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_expense"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="支出" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn2"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="2"
-                    android:textSize="24sp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_income"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="收入" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+            </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn3"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="3"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn4"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="4"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn5"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="5"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn6"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="6"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn7"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="7"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn8"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="8"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn9"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="9"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDot"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="."
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn0"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="0"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn00"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    android:text="00"
-                    android:textSize="24sp" />
-            </GridLayout>
-
-            <!-- 删除和清空按钮 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_soft_panel"
+                android:orientation="vertical"
+                android:padding="18dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDelete"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="删除" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnClear"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text="清空" />
-            </LinearLayout>
-
-            <!-- 保存按钮 -->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSave"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="保存"
-                    android:textSize="18sp" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
+                <TextView
+                    android:id="@+id/tvCategoryLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
-            </FrameLayout>
+                    android:text="选择分类"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:overScrollMode="never"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/item_category" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_soft_panel"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDate"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="viewStart"
+                    app:icon="@drawable/ic_calendar"
+                    tools:text="2026-03-24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="选择账户"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAccounts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:overScrollMode="never"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_account" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etRemark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="备注（选填）"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_soft_panel"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="数字键盘"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:columnCount="3"
+                    android:rowCount="4">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn1"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="1"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn2"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="2"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn3"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="3"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn4"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="4"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn5"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="5"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn6"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="6"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn7"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="7"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn8"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="8"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn9"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="9"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDot"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="."
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn0"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="0"
+                        android:textSize="22sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn00"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="4dp"
+                        android:text="00"
+                        android:textSize="22sp" />
+                </GridLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDelete"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:text="删除" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClear"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:text="清空" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="保存"
+                        android:textSize="17sp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+                </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

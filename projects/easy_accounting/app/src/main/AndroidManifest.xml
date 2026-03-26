@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
-    <!-- 前台服务权限 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".EasyAccountingApp"
@@ -24,6 +22,7 @@
             android:theme="@style/Theme.EasyAccounting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,27 +39,42 @@
             android:parentActivityName=".ui.MainActivity"
             android:theme="@style/Theme.EasyAccounting" />
 
-        <!-- 无障碍服务设置引导页面 -->
+        <activity
+            android:name=".ui.ai.AiChatActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/Theme.EasyAccounting" />
+
+        <activity
+            android:name=".ui.ai.AiSettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.ai.AiChatActivity"
+            android:theme="@style/Theme.EasyAccounting" />
+
         <activity
             android:name=".ui.setting.AccessibilitySettingActivity"
             android:exported="false"
             android:parentActivityName=".ui.MainActivity"
             android:theme="@style/Theme.EasyAccounting" />
 
-        <!-- 支付监听无障碍服务 -->
         <service
             android:name=".service.PayAccessibilityService"
             android:exported="false"
+            android:foregroundServiceType="specialUse"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/pay_accessibility_service" />
+
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="auto_accounting_accessibility" />
         </service>
 
-        <!-- 悬浮窗服务（前台服务） -->
         <service
             android:name=".service.FloatBubbleService"
             android:exported="false"

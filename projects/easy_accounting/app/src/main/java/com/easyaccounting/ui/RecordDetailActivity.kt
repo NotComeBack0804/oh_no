@@ -1,18 +1,21 @@
 package com.easyaccounting.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.easyaccounting.EasyAccountingApp
+import com.easyaccounting.R
 import com.easyaccounting.data.entity.Bill
 import com.easyaccounting.data.entity.Income
 import com.easyaccounting.databinding.ActivityRecordDetailBinding
+import com.easyaccounting.ui.ai.AiChatActivity
 import com.easyaccounting.util.DateUtils
 import com.easyaccounting.util.FormatUtils
-import kotlinx.coroutines.flow.first
+import com.easyaccounting.util.ThemeUtils
 import kotlinx.coroutines.launch
 
 class RecordDetailActivity : AppCompatActivity() {
@@ -23,29 +26,37 @@ class RecordDetailActivity : AppCompatActivity() {
 
     private var billId: Long? = null
     private var incomeId: Long? = null
-    private var isBill: Boolean = true
+    private var isBill = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeUtils.applySelectedTheme(this)
         super.onCreate(savedInstanceState)
         binding = ActivityRecordDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ThemeUtils.applyScreenBackground(binding.detailRoot, this)
 
-        billId = intent.getLongExtra(EXTRA_BILL_ID, -1).takeIf { it != -1L }
-        incomeId = intent.getLongExtra(EXTRA_INCOME_ID, -1).takeIf { it != -1L }
+        billId = intent.getLongExtra(EXTRA_BILL_ID, -1L).takeIf { it != -1L }
+        incomeId = intent.getLongExtra(EXTRA_INCOME_ID, -1L).takeIf { it != -1L }
 
-        if (billId != null) {
-            isBill = true
-            loadBillDetails()
-        } else if (incomeId != null) {
-            isBill = false
-            loadIncomeDetails()
-        } else {
-            finish()
-            return
+        when {
+            billId != null -> {
+                isBill = true
+                loadBillDetails()
+            }
+
+            incomeId != null -> {
+                isBill = false
+                loadIncomeDetails()
+            }
+
+            else -> {
+                finish()
+                return
+            }
         }
 
         setupToolbar()
-        setupDeleteButton()
+        setupButtons()
     }
 
     private fun setupToolbar() {
@@ -55,29 +66,30 @@ class RecordDetailActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
-    private fun setupDeleteButton() {
-        binding.btnDelete.setOnClickListener {
-            showDeleteConfirmation()
-        }
+    private fun setupButtons() {
+        binding.btnDelete.setOnClickListener { showDeleteConfirmation() }
     }
 
     private fun loadBillDetails() {
         lifecycleScope.launch {
             billId?.let { id ->
-                val bill = app.billRepository.getBillById(id)
-                bill?.let { displayBill(it) }
+                val bill = app.billRepository.getBillById(id) ?: return@launch
+                displayBill(bill)
 
-                // 获取分类名称
-                bill?.categoryId?.let { categoryId ->
-                    val category = app.categoryRepository.getCategoryById(categoryId)
-                    binding.tvCategory.text = category?.name ?: "未知分类"
-                }
+                binding.tvCategory.text = bill.categoryId?.let { categoryId ->
+                    app.categoryRepository.getCategoryById(categoryId)?.name ?: "未知分类"
+                } ?: "未分类"
 
-                // 获取账户名称
-                bill?.accountId?.let { accountId ->
-                    val account = app.accountRepository.getAccountById(accountId)
-                    binding.tvAccount.text = account?.name ?: "未知账户"
-                }
+                binding.tvAccount.text = bill.accountId?.let { accountId ->
+                    app.accountRepository.getAccountById(accountId)?.name ?: "未知账户"
+                } ?: "未设置账户"
+
+                val messageId = app.aiChatRepository.findFirstMessageIdByBillId(id)
+                updateContextButton(
+                    targetMessageId = messageId,
+                    linkedBillId = id,
+                    linkedIncomeId = null
+                )
             }
         }
     }
@@ -85,43 +97,71 @@ class RecordDetailActivity : AppCompatActivity() {
     private fun loadIncomeDetails() {
         lifecycleScope.launch {
             incomeId?.let { id ->
-                val income = app.incomeRepository.getIncomeById(id)
-                income?.let { displayIncome(it) }
+                val income = app.incomeRepository.getIncomeById(id) ?: return@launch
+                displayIncome(income)
 
-                // 获取账户名称
-                income?.accountId?.let { accountId ->
-                    val account = app.accountRepository.getAccountById(accountId)
-                    binding.tvAccount.text = account?.name ?: "未知账户"
-                }
+                binding.tvAccount.text = income.accountId?.let { accountId ->
+                    app.accountRepository.getAccountById(accountId)?.name ?: "未知账户"
+                } ?: "未设置账户"
+
+                val messageId = app.aiChatRepository.findFirstMessageIdByIncomeId(id)
+                updateContextButton(
+                    targetMessageId = messageId,
+                    linkedBillId = null,
+                    linkedIncomeId = id
+                )
             }
         }
     }
 
+    private fun updateContextButton(
+        targetMessageId: Long?,
+        linkedBillId: Long?,
+        linkedIncomeId: Long?
+    ) {
+        binding.btnViewContext.isVisible = targetMessageId != null
+        if (targetMessageId == null) return
+
+        binding.btnViewContext.setOnClickListener {
+            startActivity(
+                Intent(this, AiChatActivity::class.java).apply {
+                    putExtra(AiChatActivity.EXTRA_TARGET_MESSAGE_ID, targetMessageId)
+                    linkedBillId?.let { putExtra(AiChatActivity.EXTRA_LINKED_BILL_ID, it) }
+                    linkedIncomeId?.let { putExtra(AiChatActivity.EXTRA_LINKED_INCOME_ID, it) }
+                }
+            )
+        }
+    }
+
     private fun displayBill(bill: Bill) {
+        binding.amountPanel.setBackgroundResource(R.drawable.bg_amount_expense)
         binding.tvAmount.text = "- ${FormatUtils.formatAmount(bill.amount)}"
         binding.tvDate.text = DateUtils.formatDate(bill.date)
-        binding.tvRemark.text = bill.remark ?: "无备注"
+        binding.tvRemark.text = bill.remark?.takeIf { it.isNotBlank() } ?: "未填写备注"
         binding.tvType.text = "支出"
         binding.tvSourceOrCategory.text = "分类"
-        binding.tvCategory.text = "" // 单独加载
+        binding.tvCategory.text = "加载中..."
+        binding.tvAccount.text = "加载中..."
+        binding.btnDelete.text = "删除支出记录"
     }
 
     private fun displayIncome(income: Income) {
+        binding.amountPanel.setBackgroundResource(R.drawable.bg_amount_income)
         binding.tvAmount.text = "+ ${FormatUtils.formatAmount(income.amount)}"
         binding.tvDate.text = DateUtils.formatDate(income.date)
-        binding.tvRemark.text = income.remark ?: "无备注"
+        binding.tvRemark.text = income.remark?.takeIf { it.isNotBlank() } ?: "未填写备注"
         binding.tvType.text = "收入"
         binding.tvSourceOrCategory.text = "来源"
         binding.tvCategory.text = income.source
+        binding.tvAccount.text = "加载中..."
+        binding.btnDelete.text = "删除收入记录"
     }
 
     private fun showDeleteConfirmation() {
         AlertDialog.Builder(this)
             .setTitle("删除确认")
             .setMessage("确定要删除这条记录吗？")
-            .setPositiveButton("删除") { _, _ ->
-                deleteRecord()
-            }
+            .setPositiveButton("删除") { _, _ -> deleteRecord() }
             .setNegativeButton("取消", null)
             .show()
     }
@@ -145,7 +185,11 @@ class RecordDetailActivity : AppCompatActivity() {
                 Toast.makeText(this@RecordDetailActivity, "删除成功", Toast.LENGTH_SHORT).show()
                 finish()
             } catch (e: Exception) {
-                Toast.makeText(this@RecordDetailActivity, "删除失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@RecordDetailActivity,
+                    "删除失败：${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

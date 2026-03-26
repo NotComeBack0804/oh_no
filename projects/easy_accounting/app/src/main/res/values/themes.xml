@@ -26,5 +26,105 @@
         <item name="colorOutline">@color/md_theme_light_outline</item>
         <item name="colorOutlineVariant">@color/md_theme_light_outlineVariant</item>
         <item name="android:statusBarColor">@color/md_theme_light_surface</item>
+        <item name="toolbarStyle">@style/Widget.EasyAccounting.Toolbar</item>
+    </style>
+
+    <style name="Theme.EasyAccounting.Ocean" parent="Theme.EasyAccounting">
+        <item name="colorPrimary">@color/theme_ocean_primary</item>
+        <item name="colorOnPrimary">@color/theme_ocean_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/theme_ocean_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/theme_ocean_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/theme_ocean_secondary</item>
+        <item name="colorOnSecondary">@color/theme_ocean_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/theme_ocean_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/theme_ocean_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/theme_ocean_tertiary</item>
+        <item name="colorOnTertiary">@color/theme_ocean_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/theme_ocean_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/theme_ocean_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/theme_ocean_background</item>
+        <item name="colorOnBackground">@color/theme_ocean_onBackground</item>
+        <item name="colorSurface">@color/theme_ocean_surface</item>
+        <item name="colorOnSurface">@color/theme_ocean_onSurface</item>
+        <item name="colorSurfaceVariant">@color/theme_ocean_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/theme_ocean_onSurfaceVariant</item>
+        <item name="colorOutline">@color/theme_ocean_outline</item>
+        <item name="colorOutlineVariant">@color/theme_ocean_outlineVariant</item>
+    </style>
+
+    <style name="Theme.EasyAccounting.Forest" parent="Theme.EasyAccounting">
+        <item name="colorPrimary">@color/theme_forest_primary</item>
+        <item name="colorOnPrimary">@color/theme_forest_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/theme_forest_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/theme_forest_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/theme_forest_secondary</item>
+        <item name="colorOnSecondary">@color/theme_forest_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/theme_forest_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/theme_forest_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/theme_forest_tertiary</item>
+        <item name="colorOnTertiary">@color/theme_forest_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/theme_forest_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/theme_forest_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/theme_forest_background</item>
+        <item name="colorOnBackground">@color/theme_forest_onBackground</item>
+        <item name="colorSurface">@color/theme_forest_surface</item>
+        <item name="colorOnSurface">@color/theme_forest_onSurface</item>
+        <item name="colorSurfaceVariant">@color/theme_forest_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/theme_forest_onSurfaceVariant</item>
+        <item name="colorOutline">@color/theme_forest_outline</item>
+        <item name="colorOutlineVariant">@color/theme_forest_outlineVariant</item>
+    </style>
+
+    <style name="Theme.EasyAccounting.Sunrise" parent="Theme.EasyAccounting">
+        <item name="colorPrimary">@color/theme_sunrise_primary</item>
+        <item name="colorOnPrimary">@color/theme_sunrise_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/theme_sunrise_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/theme_sunrise_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/theme_sunrise_secondary</item>
+        <item name="colorOnSecondary">@color/theme_sunrise_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/theme_sunrise_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/theme_sunrise_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/theme_sunrise_tertiary</item>
+        <item name="colorOnTertiary">@color/theme_sunrise_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/theme_sunrise_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/theme_sunrise_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/theme_sunrise_background</item>
+        <item name="colorOnBackground">@color/theme_sunrise_onBackground</item>
+        <item name="colorSurface">@color/theme_sunrise_surface</item>
+        <item name="colorOnSurface">@color/theme_sunrise_onSurface</item>
+        <item name="colorSurfaceVariant">@color/theme_sunrise_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/theme_sunrise_onSurfaceVariant</item>
+        <item name="colorOutline">@color/theme_sunrise_outline</item>
+        <item name="colorOutlineVariant">@color/theme_sunrise_outlineVariant</item>
+    </style>
+
+    <style name="Theme.EasyAccounting.Rose" parent="Theme.EasyAccounting">
+        <item name="colorPrimary">@color/theme_rose_primary</item>
+        <item name="colorOnPrimary">@color/theme_rose_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/theme_rose_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/theme_rose_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/theme_rose_secondary</item>
+        <item name="colorOnSecondary">@color/theme_rose_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/theme_rose_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/theme_rose_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/theme_rose_tertiary</item>
+        <item name="colorOnTertiary">@color/theme_rose_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/theme_rose_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/theme_rose_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/theme_rose_background</item>
+        <item name="colorOnBackground">@color/theme_rose_onBackground</item>
+        <item name="colorSurface">@color/theme_rose_surface</item>
+        <item name="colorOnSurface">@color/theme_rose_onSurface</item>
+        <item name="colorSurfaceVariant">@color/theme_rose_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/theme_rose_onSurfaceVariant</item>
+        <item name="colorOutline">@color/theme_rose_outline</item>
+        <item name="colorOutlineVariant">@color/theme_rose_outlineVariant</item>
+    </style>
+
+    <style name="Widget.EasyAccounting.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="subtitleTextColor">?attr/colorOnPrimary</item>
+        <item name="navigationIconTint">?attr/colorOnPrimary</item>
     </style>
 </resources>

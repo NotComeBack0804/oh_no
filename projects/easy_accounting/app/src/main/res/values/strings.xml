@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">简易记账</string>
-    <string name="accessibility_service_description">简易记账自动记账服务，用于监听支付宝和微信支付成功页面，自动提取金额并创建待确认账单。本服务仅读取支付金额信息，不会收集或上传任何个人信息。</string>
+    <string name="accessibility_service_description">简易记账自动记账服务，用于监听支付宝、微信、美团、抖音和京东等支付成功页面，自动提取金额并创建待确认账单。本服务仅读取支付金额信息，不会收集或上传任何个人隐私内容。</string>
 </resources>

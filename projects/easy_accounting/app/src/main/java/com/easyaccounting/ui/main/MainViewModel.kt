@@ -5,6 +5,7 @@ import com.easyaccounting.data.entity.Bill
 import com.easyaccounting.data.entity.BillWithCategory
 import com.easyaccounting.data.entity.Category
 import com.easyaccounting.data.entity.CategoryType
+import com.easyaccounting.data.entity.ExpenseCategoryShare
 import com.easyaccounting.data.entity.Income
 import com.easyaccounting.data.repository.BillRepository
 import com.easyaccounting.data.repository.CategoryRepository
@@ -131,8 +132,8 @@ class MainViewModel(
 
     // Top5 支出排行榜
     @OptIn(ExperimentalCoroutinesApi::class)
-    val topExpenses: Flow<List<Bill>> = currentMonthRange.flatMapLatest { (start, end) ->
-        billRepository.getTopBillsByAmount(start, end, 5)
+    val topExpenses: Flow<List<ExpenseCategoryShare>> = currentMonthRange.flatMapLatest { (start, end) ->
+        billRepository.getExpenseCategoryShares(start, end, 5)
     }
 
     init {

@@ -67,3 +67,8 @@ data class BillWithCategory(
         createdAt = createdAt
     )
 }
+
+data class ExpenseCategoryShare(
+    val categoryName: String,
+    val totalAmount: Double
+)

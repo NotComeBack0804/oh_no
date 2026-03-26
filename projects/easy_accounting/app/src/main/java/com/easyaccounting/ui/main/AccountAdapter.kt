@@ -1,5 +1,6 @@
 package com.easyaccounting.ui.main
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.easyaccounting.data.entity.Account
 import com.easyaccounting.databinding.ItemAccountBinding
 import com.easyaccounting.util.IconUtils
+import com.google.android.material.R as MaterialAttr
+import com.google.android.material.color.MaterialColors
 
 class AccountAdapter(
     private val onItemClick: (Account) -> Unit
@@ -56,7 +59,26 @@ class AccountAdapter(
             binding.ivAccountIcon.setImageResource(
                 IconUtils.getAccountIconResourceId(account.type.name)
             )
-            binding.root.isSelected = account.id == selectedAccountId
+
+            val selected = account.id == selectedAccountId
+            val density = binding.root.resources.displayMetrics.density
+            val strokeColor = if (selected) {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorPrimary)
+            } else {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorOutlineVariant)
+            }
+            val backgroundColor = if (selected) {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorPrimaryContainer)
+            } else {
+                MaterialColors.getColor(binding.root, MaterialAttr.attr.colorSurface)
+            }
+
+            binding.root.isSelected = selected
+            binding.root.strokeColor = strokeColor
+            binding.root.strokeWidth = if (selected) (2 * density).toInt() else 1
+            binding.root.setCardBackgroundColor(backgroundColor)
+            binding.root.cardElevation = if (selected) 6f * density else 0f
+            binding.tvAccountName.setTypeface(null, if (selected) Typeface.BOLD else Typeface.NORMAL)
         }
     }
 

@@ -9,6 +9,7 @@ import com.easyaccounting.data.entity.Income
 import com.easyaccounting.databinding.ItemIncomeBinding
 import com.easyaccounting.util.DateUtils
 import com.easyaccounting.util.FormatUtils
+import com.easyaccounting.util.IconUtils
 
 class IncomeAdapter(
     private val onItemClick: (Income) -> Unit,
@@ -52,7 +53,8 @@ class IncomeAdapter(
             binding.tvAmount.text = "+ ${FormatUtils.formatAmount(income.amount)}"
             binding.tvDate.text = DateUtils.formatDay(income.date)
             binding.tvSource.text = income.source
-            binding.tvRemark.text = income.remark ?: ""
+            binding.tvRemark.text = income.remark?.takeIf { it.isNotBlank() } ?: "未填写备注"
+            binding.ivSourceIcon.setImageResource(IconUtils.getIncomeSourceIconByName(income.source))
         }
     }
 

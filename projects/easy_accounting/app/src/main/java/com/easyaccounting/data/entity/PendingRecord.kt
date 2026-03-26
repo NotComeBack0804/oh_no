@@ -20,7 +20,11 @@ data class PendingRecord(
 
 enum class PaySource {
     ALIPAY,   // 支付宝
-    WECHAT    // 微信
+    WECHAT,   // 微信
+    MEITUAN,  // 美团
+    DOUYIN,   // 抖音
+    JD,       // 京东
+    OTHER     // 其他
 }
 
 enum class PendingStatus {

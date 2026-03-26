@@ -4,156 +4,156 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_float_bubble"
+    android:elevation="10dp"
     android:orientation="vertical"
-    android:padding="12dp"
-    android:elevation="8dp">
+    android:padding="14dp">
 
-    <!-- 金额和来源 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_icon_circle">
+
+            <ImageView
+                android:id="@+id/iv_source_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:contentDescription="支付来源图标"
+                android:src="@drawable/ic_alipay" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tv_bubble_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:text="¥0.00"
-            android:textColor="#FF5722"
-            android:textSize="20sp"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="#D92D20"
             android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/iv_source_icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="6dp"
-            android:src="@drawable/ic_alipay"
-            android:contentDescription="来源" />
     </LinearLayout>
 
-    <!-- 来源和时间 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:src="@drawable/ic_alipay"
-            android:visibility="gone"
-            android:contentDescription="" />
 
         <TextView
             android:id="@+id/tv_bubble_source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="4dp"
             android:text="支付来源"
-            android:textColor="#757575"
-            android:textSize="11sp" />
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
             android:text="·"
-            android:textColor="#757575"
-            android:textSize="11sp" />
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
 
         <TextView
             android:id="@+id/tv_bubble_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
-            android:textColor="#757575"
-            android:textSize="11sp" />
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 
-    <!-- 分类快捷按钮 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btn_category_food"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_icon_circle"
             android:contentDescription="餐饮"
+            android:padding="9dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_food"
-            app:tint="#FF9800" />
+            app:tint="#F79009" />
 
         <ImageButton
             android:id="@+id/btn_category_transport"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_icon_circle"
             android:contentDescription="交通"
+            android:padding="9dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_transport"
-            app:tint="#2196F3" />
+            app:tint="#1570EF" />
 
         <ImageButton
             android:id="@+id/btn_category_shopping"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_icon_circle"
             android:contentDescription="购物"
+            android:padding="9dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_shopping"
-            app:tint="#E91E63" />
+            app:tint="#EE46BC" />
 
         <ImageButton
             android:id="@+id/btn_category_other"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_icon_circle"
             android:contentDescription="其他"
+            android:padding="9dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_other"
-            app:tint="#9E9E9E" />
+            app:tint="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 
-    <!-- 确认/忽略按钮 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:gravity="end"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btn_ignore"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_icon_circle"
             android:contentDescription="忽略"
+            android:padding="9dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_close"
-            app:tint="#9E9E9E" />
+            app:tint="?attr/colorOnSurfaceVariant" />
 
         <ImageButton
             android:id="@+id/btn_confirm"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/bg_confirm_button"
             android:contentDescription="确认"
+            android:padding="9dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_check"
             app:tint="@android:color/white" />
     </LinearLayout>
-
 </LinearLayout>

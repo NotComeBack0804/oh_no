@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.easyaccounting.data.dao.AccountDao
+import com.easyaccounting.data.dao.AiChatMessageDao
 import com.easyaccounting.data.dao.BillDao
 import com.easyaccounting.data.dao.CategoryDao
 import com.easyaccounting.data.dao.IncomeDao
 import com.easyaccounting.data.dao.PendingRecordDao
 import com.easyaccounting.data.entity.Account
 import com.easyaccounting.data.entity.AccountType
+import com.easyaccounting.data.entity.AiChatMessage
 import com.easyaccounting.data.entity.Bill
 import com.easyaccounting.data.entity.Category
 import com.easyaccounting.data.entity.CategoryType
@@ -21,12 +24,18 @@ import com.easyaccounting.util.SecurityUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 
 @Database(
-    entities = [Bill::class, Income::class, Category::class, Account::class, PendingRecord::class],
-    version = 2,
+    entities = [
+        Bill::class,
+        Income::class,
+        Category::class,
+        Account::class,
+        PendingRecord::class,
+        AiChatMessage::class
+    ],
+    version = 3,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -35,50 +44,83 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun accountDao(): AccountDao
     abstract fun pendingRecordDao(): PendingRecordDao
+    abstract fun aiChatMessageDao(): AiChatMessageDao
 
     companion object {
         private const val DATABASE_NAME = "easy_accounting.db"
-        // 数据库加密密钥通过 Android Keystore 安全存储，不再硬编码
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS `ai_chat_messages` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `conversationId` TEXT NOT NULL,
+                        `role` TEXT NOT NULL,
+                        `content` TEXT NOT NULL,
+                        `createdAt` INTEGER NOT NULL,
+                        `intentType` TEXT NOT NULL,
+                        `ledgerAmount` REAL,
+                        `ledgerCategory` TEXT,
+                        `ledgerSummary` TEXT,
+                        `linkedBillId` INTEGER,
+                        `linkedIncomeId` INTEGER,
+                        `needsClarification` INTEGER NOT NULL,
+                        `sourceLabel` TEXT
+                    )
+                    """.trimIndent()
+                )
+                database.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_ai_chat_messages_conversationId` ON `ai_chat_messages` (`conversationId`)"
+                )
+                database.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_ai_chat_messages_linkedBillId` ON `ai_chat_messages` (`linkedBillId`)"
+                )
+                database.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_ai_chat_messages_linkedIncomeId` ON `ai_chat_messages` (`linkedIncomeId`)"
+                )
+                database.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_ai_chat_messages_createdAt` ON `ai_chat_messages` (`createdAt`)"
+                )
+            }
+        }
+
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                INSTANCE ?: buildDatabase(context.applicationContext).also { INSTANCE = it }
             }
         }
 
         private fun buildDatabase(context: Context): AppDatabase {
-            // 从 Keystore 安全获取数据库加密密钥
             val passphrase = SecurityUtils.getOrCreateDatabaseKey(context)
             val factory = SupportFactory(passphrase)
 
             return Room.databaseBuilder(
-                context.applicationContext,
+                context,
                 AppDatabase::class.java,
                 DATABASE_NAME
             )
-                .openHelperFactory(factory) // 启用数据库加密
-                .addCallback(DatabaseCallback())
+                .openHelperFactory(factory)
+                .addMigrations(MIGRATION_2_3)
+                .addCallback(DatabaseCallback(context))
                 .fallbackToDestructiveMigration()
                 .build()
         }
 
-        /**
-         * 数据库创建时的回调，用于初始化默认数据
-         */
-        private class DatabaseCallback : Callback() {
+        private class DatabaseCallback(
+            private val context: Context
+        ) : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-                INSTANCE?.let { database ->
-                    CoroutineScope(Dispatchers.IO).launch {
-                        populateDefaultData(database)
-                    }
+                CoroutineScope(Dispatchers.IO).launch {
+                    populateDefaultData(getInstance(context))
                 }
             }
 
             private suspend fun populateDefaultData(database: AppDatabase) {
-                // 初始化默认支出分类
                 val expenseCategories = listOf(
                     Category(name = "餐饮", icon = "ic_food", type = CategoryType.EXPENSE),
                     Category(name = "交通", icon = "ic_transport", type = CategoryType.EXPENSE),
@@ -90,7 +132,6 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 database.categoryDao().insertAll(expenseCategories)
 
-                // 初始化默认收入分类
                 val incomeCategories = listOf(
                     Category(name = "工资", icon = "ic_salary", type = CategoryType.INCOME),
                     Category(name = "奖金", icon = "ic_bonus", type = CategoryType.INCOME),
@@ -99,14 +140,13 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 database.categoryDao().insertAll(incomeCategories)
 
-                // 初始化默认账户
-                val defaultAccounts = listOf(
+                val accounts = listOf(
                     Account(name = "支付宝", type = AccountType.ALIPAY),
                     Account(name = "微信", type = AccountType.WECHAT),
                     Account(name = "银行卡", type = AccountType.BANK_CARD),
                     Account(name = "现金", type = AccountType.CASH)
                 )
-                database.accountDao().insertAll(defaultAccounts)
+                database.accountDao().insertAll(accounts)
             }
         }
     }

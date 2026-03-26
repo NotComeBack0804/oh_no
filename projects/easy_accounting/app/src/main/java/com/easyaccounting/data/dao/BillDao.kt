@@ -3,6 +3,7 @@ package com.easyaccounting.data.dao
 import androidx.room.*
 import com.easyaccounting.data.entity.Bill
 import com.easyaccounting.data.entity.BillWithCategory
+import com.easyaccounting.data.entity.ExpenseCategoryShare
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -42,6 +43,24 @@ interface BillDao {
 
     @Query("SELECT * FROM bills WHERE date >= :startDate AND date <= :endDate ORDER BY amount DESC LIMIT :limit")
     fun getTopBillsByAmount(startDate: Long, endDate: Long, limit: Int): Flow<List<Bill>>
+
+    @Query(
+        """
+        SELECT COALESCE(c.name, '其他') AS categoryName,
+               SUM(b.amount) AS totalAmount
+        FROM bills b
+        LEFT JOIN categories c ON b.categoryId = c.id
+        WHERE b.date >= :startDate AND b.date <= :endDate
+        GROUP BY COALESCE(c.name, '其他')
+        ORDER BY totalAmount DESC
+        LIMIT :limit
+        """
+    )
+    fun getExpenseCategoryShares(
+        startDate: Long,
+        endDate: Long,
+        limit: Int
+    ): Flow<List<ExpenseCategoryShare>>
 
     // JOIN query: get bills with category names for display
     @Query("""

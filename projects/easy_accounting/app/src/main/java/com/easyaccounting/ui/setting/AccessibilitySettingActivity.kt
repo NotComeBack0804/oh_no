@@ -1,7 +1,6 @@
 package com.easyaccounting.ui.setting
 
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,6 +10,7 @@ import android.view.View
 import android.view.accessibility.AccessibilityManager
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +18,9 @@ import androidx.appcompat.widget.SwitchCompat
 import com.easyaccounting.R
 import com.easyaccounting.service.FloatBubbleService
 import com.easyaccounting.service.PayAccessibilityService
+import com.easyaccounting.util.AppPreferences
+import com.easyaccounting.util.ThemeUtils
 
-/**
- * 无障碍服务设置引导页面
- * 引导用户开启自动记账所需的无障碍服务和悬浮窗权限
- */
 class AccessibilitySettingActivity : AppCompatActivity() {
 
     private lateinit var prefs: SharedPreferences
@@ -32,12 +30,18 @@ class AccessibilitySettingActivity : AppCompatActivity() {
     private lateinit var btnOpenOverlay: Button
     private lateinit var ivAlipayStatus: ImageView
     private lateinit var ivWechatStatus: ImageView
+    private lateinit var ivMeituanStatus: ImageView
+    private lateinit var ivDouyinStatus: ImageView
+    private lateinit var ivJdStatus: ImageView
+    private lateinit var themeGroup: RadioGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeUtils.applySelectedTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accessibility_setting)
+        ThemeUtils.applyScreenBackground(findViewById(R.id.accessibilityRoot), this)
 
-        prefs = getSharedPreferences("easy_accounting_prefs", Context.MODE_PRIVATE)
+        prefs = AppPreferences.prefs(this)
 
         initViews()
         setupListeners()
@@ -56,64 +60,73 @@ class AccessibilitySettingActivity : AppCompatActivity() {
         btnOpenOverlay = findViewById(R.id.btn_open_overlay)
         ivAlipayStatus = findViewById(R.id.iv_alipay_status)
         ivWechatStatus = findViewById(R.id.iv_wechat_status)
+        ivMeituanStatus = findViewById(R.id.iv_meituan_status)
+        ivDouyinStatus = findViewById(R.id.iv_douyin_status)
+        ivJdStatus = findViewById(R.id.iv_jd_status)
+        themeGroup = findViewById(R.id.rg_theme)
 
-        // 恢复开关状态
-        switchAutoAccounting.isChecked = prefs.getBoolean("auto_accounting_enabled", true)
+        switchAutoAccounting.isChecked = prefs.getBoolean(AppPreferences.KEY_AUTO_ACCOUNTING, true)
+        themeGroup.check(ThemeUtils.getThemeRadioButtonId(AppPreferences.getSelectedThemeName(this)))
     }
 
     private fun setupListeners() {
-        // 开关切换
         switchAutoAccounting.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean("auto_accounting_enabled", isChecked).apply()
+            prefs.edit().putBoolean(AppPreferences.KEY_AUTO_ACCOUNTING, isChecked).apply()
             updateAutoAccountingService(isChecked)
+            updateServiceStatus()
 
             if (isChecked && !isAccessibilityServiceEnabled()) {
                 Toast.makeText(this, "请先开启无障碍服务", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // 打开无障碍服务设置
-        btnOpenAccessibility.setOnClickListener {
-            openAccessibilitySettings()
-        }
+        btnOpenAccessibility.setOnClickListener { openAccessibilitySettings() }
+        btnOpenOverlay.setOnClickListener { openOverlaySettings() }
 
-        // 打开悬浮窗权限设置
-        btnOpenOverlay.setOnClickListener {
-            openOverlaySettings()
+        themeGroup.setOnCheckedChangeListener { _, checkedId ->
+            val theme = ThemeUtils.getThemeNameForRadioButton(checkedId) ?: return@setOnCheckedChangeListener
+            if (theme == AppPreferences.getSelectedThemeName(this)) {
+                return@setOnCheckedChangeListener
+            }
+            prefs.edit().putString(AppPreferences.KEY_THEME, theme).apply()
+            Toast.makeText(this, "主题已切换", Toast.LENGTH_SHORT).show()
+            recreate()
         }
     }
 
     private fun updateServiceStatus() {
+        val autoEnabled = prefs.getBoolean(AppPreferences.KEY_AUTO_ACCOUNTING, true)
         val accessibilityEnabled = isAccessibilityServiceEnabled()
         val overlayEnabled = isOverlayEnabled()
 
-        // 更新服务状态文本
         tvServiceStatus.text = when {
-            accessibilityEnabled && overlayEnabled -> "✓ 服务已就绪"
-            accessibilityEnabled && !overlayEnabled -> "⚠ 请开启悬浮窗权限"
-            else -> "✗ 服务未启用"
+            !autoEnabled -> "自动获取已关闭"
+            accessibilityEnabled && overlayEnabled -> "服务已就绪"
+            accessibilityEnabled -> "请开启悬浮窗权限"
+            else -> "服务未启用"
         }
 
-        // 更新图标状态
-        ivAlipayStatus.visibility = if (accessibilityEnabled) View.VISIBLE else View.GONE
-        ivWechatStatus.visibility = if (accessibilityEnabled) View.VISIBLE else View.GONE
+        val iconVisible = autoEnabled && accessibilityEnabled
+        val visibility = if (iconVisible) View.VISIBLE else View.GONE
+        ivAlipayStatus.visibility = visibility
+        ivWechatStatus.visibility = visibility
+        ivMeituanStatus.visibility = visibility
+        ivDouyinStatus.visibility = visibility
+        ivJdStatus.visibility = visibility
 
-        // 更新按钮文字
         btnOpenAccessibility.text = if (accessibilityEnabled) "无障碍服务已开启" else "开启无障碍服务"
         btnOpenOverlay.text = if (overlayEnabled) "悬浮窗权限已开启" else "开启悬浮窗权限"
     }
 
-    /**
-     * 检查无障碍服务是否已启用
-     */
     private fun isAccessibilityServiceEnabled(): Boolean {
         val accessibilityManager = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
         val enabledServices = accessibilityManager.getEnabledAccessibilityServiceList(
-            AccessibilityServiceInfo.FEEDBACK_GENERIC
+            AccessibilityServiceInfo.FEEDBACK_ALL_MASK
         )
 
         val targetPackage = packageName
         val targetClass = PayAccessibilityService::class.java.name
+
         return enabledServices.any { service ->
             service.resolveInfo?.serviceInfo?.let { serviceInfo ->
                 serviceInfo.packageName == targetPackage && serviceInfo.name == targetClass
@@ -121,74 +134,48 @@ class AccessibilitySettingActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 检查悬浮窗权限是否已授权
-     */
     private fun isOverlayEnabled(): Boolean {
         return Settings.canDrawOverlays(this)
     }
 
-    /**
-     * 打开无障碍服务设置页面
-     */
     private fun openAccessibilitySettings() {
         try {
-            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            startActivity(intent)
-        } catch (e: Exception) {
-            // 兜底：尝试直接打开应用详情页
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        } catch (_: Exception) {
             try {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                     data = android.net.Uri.parse("package:$packageName")
-                }
-                startActivity(intent)
-            } catch (e2: Exception) {
-                Toast.makeText(this, "请手动在设置中开启", Toast.LENGTH_LONG).show()
+                })
+            } catch (_: Exception) {
+                Toast.makeText(this, "请手动前往系统设置开启服务", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    /**
-     * 打开悬浮窗权限设置页面
-     */
     private fun openOverlaySettings() {
         try {
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                android.net.Uri.parse("package:$packageName")
+            startActivity(
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:$packageName")
+                )
             )
-            startActivity(intent)
-        } catch (e: Exception) {
-            Toast.makeText(this, "请手动在设置中开启悬浮窗权限", Toast.LENGTH_LONG).show()
+        } catch (_: Exception) {
+            Toast.makeText(this, "请手动前往系统设置开启悬浮窗权限", Toast.LENGTH_LONG).show()
         }
     }
 
-    /**
-     * 启用/禁用自动记账相关服务
-     */
     private fun updateAutoAccountingService(enabled: Boolean) {
-        val serviceIntent = Intent(this, PayAccessibilityService::class.java).apply {
+        val bubbleIntent = Intent(this, FloatBubbleService::class.java).apply {
             action = if (enabled) {
-                PayAccessibilityService.ACTION_ENABLE_AUTO_ACCOUNTING
+                FloatBubbleService.ACTION_SHOW_BUBBLE
             } else {
-                PayAccessibilityService.ACTION_DISABLE_AUTO_ACCOUNTING
+                FloatBubbleService.ACTION_DISMISS_BUBBLE
             }
-        }
-        startService(serviceIntent)
-
-        // 同时控制悬浮窗服务
-        val bubbleIntent = Intent(this, FloatBubbleService::class.java)
-        if (enabled) {
-            bubbleIntent.action = FloatBubbleService.ACTION_SHOW_BUBBLE
-        } else {
-            bubbleIntent.action = FloatBubbleService.ACTION_DISMISS_BUBBLE
         }
         startService(bubbleIntent)
     }
 
-    /**
-     * 返回按钮
-     */
     fun onBackPressed(view: View) {
         finish()
     }

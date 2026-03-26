@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -10,7 +11,9 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:outlineProvider="none">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -22,8 +25,10 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill">
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicatorFullWidth="false"
+            app:tabMode="fixed">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -40,161 +45,200 @@
                 android:layout_height="wrap_content"
                 android:text="统计" />
         </com.google.android.material.tabs.TabLayout>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="108dp">
 
-            <!-- 月份选择器 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <ImageButton
-                    android:id="@+id/btnPreviousMonth"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="上个月"
-                    android:src="@drawable/ic_chevron_left" />
-
-                <TextView
-                    android:id="@+id/tvCurrentMonth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="24dp"
-                    android:textAppearance="?attr/textAppearanceTitleLarge"
-                    tools:text="2024年01月" />
-
-                <ImageButton
-                    android:id="@+id/btnNextMonth"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="下个月"
-                    android:src="@drawable/ic_chevron_right" />
-            </LinearLayout>
-
-            <!-- 月度统计卡片 -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                android:background="@drawable/bg_hero_panel"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/btnPreviousMonth"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_icon_circle"
+                        android:contentDescription="上个月"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_chevron_left"
+                        app:tint="?attr/colorOnSurface" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentMonth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                        android:textStyle="bold"
+                        tools:text="2026年3月" />
+
+                    <ImageButton
+                        android:id="@+id/btnNextMonth"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_icon_circle"
+                        android:contentDescription="下个月"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="?attr/colorOnSurface" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="这个月的现金流一眼看清"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_expense"
+                        android:orientation="vertical"
+                        android:padding="14dp">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:text="支出"
+                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:textColor="#B42318" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="支出"
-                                android:textAppearance="?attr/textAppearanceBodyMedium"
-                                android:textColor="?attr/colorOnSurfaceVariant" />
-
-                            <TextView
-                                android:id="@+id/tvTotalExpense"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                                android:textColor="#E53935"
-                                tools:text="¥ 1,234.56" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/tvTotalExpense"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
+                            android:textColor="#D92D20"
+                            android:textStyle="bold"
+                            tools:text="1,234.56" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="收入"
-                                android:textAppearance="?attr/textAppearanceBodyMedium"
-                                android:textColor="?attr/colorOnSurfaceVariant" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_income"
+                        android:orientation="vertical"
+                        android:padding="14dp">
 
-                            <TextView
-                                android:id="@+id/tvTotalIncome"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                                android:textColor="#43A047"
-                                tools:text="¥ 5,678.90" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:text="收入"
+                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:textColor="#027A48" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="结余"
-                                android:textAppearance="?attr/textAppearanceBodyMedium"
-                                android:textColor="?attr/colorOnSurfaceVariant" />
+                        <TextView
+                            android:id="@+id/tvTotalIncome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
+                            android:textColor="#039855"
+                            android:textStyle="bold"
+                            tools:text="5,678.90" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/tvBalance"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                                android:textColor="?attr/colorPrimary"
-                                tools:text="¥ 4,444.34" />
-                        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_balance"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="结余"
+                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:textColor="?attr/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/tvBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
+                            android:textColor="?attr/colorPrimary"
+                            android:textStyle="bold"
+                            tools:text="4,444.34" />
                     </LinearLayout>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
-            <!-- 搜索框 -->
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:background="@drawable/bg_soft_panel"
+                android:orientation="vertical"
+                android:padding="18dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSearch"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="搜索记录"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="搜索备注..."
-                    android:imeOptions="actionSearch"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="12dp"
+                    app:startIconDrawable="@drawable/ic_search">
 
-            <!-- 统计图表区域 -->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="按备注关键词搜索"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/statisticsContainer"
                 android:layout_width="match_parent"
@@ -202,102 +246,60 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <!-- 饼图：分类支出占比 -->
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp">
+                    android:background="@drawable/bg_soft_panel"
+                    android:orientation="vertical"
+                    android:padding="18dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        android:text="支出分类占比"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="支出分类占比"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:layout_marginTop="12dp" />
+                </LinearLayout>
 
-                        <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/pieChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- 折线图：近6个月趋势 -->
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp">
+                    android:background="@drawable/bg_soft_panel"
+                    android:orientation="vertical"
+                    android:padding="18dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        android:text="近 6 个月趋势"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="近6个月趋势"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/lineChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Top5 排行榜 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp">
-
-                    <LinearLayout
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/lineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Top5 支出排行"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rvTopExpenses"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:nestedScrollingEnabled="false" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                        android:layout_height="220dp"
+                        android:layout_marginTop="12dp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- 记录列表标题 -->
             <TextView
                 android:id="@+id/tvRecordsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:text="支出记录"
-                android:textAppearance="?attr/textAppearanceTitleMedium" />
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textStyle="bold" />
 
-            <!-- 记录列表 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecords"
                 android:layout_width="match_parent"
@@ -306,7 +308,6 @@
                 android:nestedScrollingEnabled="false"
                 tools:itemCount="5"
                 tools:listitem="@layout/item_bill" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -315,9 +316,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         android:contentDescription="添加记录"
         android:src="@drawable/ic_add"
         app:tint="@android:color/white" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

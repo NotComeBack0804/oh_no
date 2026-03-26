@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_ai_companion"
+        android:icon="@drawable/ic_ai_companion"
+        android:orderInCategory="1"
+        android:title="AI 伴侣"
+        app:showAsAction="always|withText" />
+
+    <item
         android:id="@+id/action_auto_accounting"
         android:icon="@drawable/ic_auto_accounting"
+        android:orderInCategory="2"
         android:title="自动记账设置"
-        app:showAsAction="ifRoom" />
-
+        app:showAsAction="never" />
 </menu>

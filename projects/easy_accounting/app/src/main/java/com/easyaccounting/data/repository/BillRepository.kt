@@ -5,6 +5,7 @@ import com.easyaccounting.data.dao.CategoryDao
 import com.easyaccounting.data.entity.Bill
 import com.easyaccounting.data.entity.BillWithCategory
 import com.easyaccounting.data.entity.Category
+import com.easyaccounting.data.entity.ExpenseCategoryShare
 import kotlinx.coroutines.flow.Flow
 
 class BillRepository(
@@ -44,6 +45,12 @@ class BillRepository(
 
     fun getTopBillsByAmount(startDate: Long, endDate: Long, limit: Int): Flow<List<Bill>> =
         billDao.getTopBillsByAmount(startDate, endDate, limit)
+
+    fun getExpenseCategoryShares(
+        startDate: Long,
+        endDate: Long,
+        limit: Int
+    ): Flow<List<ExpenseCategoryShare>> = billDao.getExpenseCategoryShares(startDate, endDate, limit)
 
     suspend fun getBillsByDateRangeSync(startDate: Long, endDate: Long): List<Bill> =
         billDao.getBillsByDateRangeSync(startDate, endDate)
